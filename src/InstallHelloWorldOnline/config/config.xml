@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+  <Name>HelloWorld</Name>
+  <Version>1.0.0</Version>
+  <Title>HelloWorld</Title>
+  <Publisher>relog</Publisher>
+  <StartMenuDir>HelloWorld</StartMenuDir>
+  <TargetDir>@ApplicationsDir@/@ProductName@</TargetDir>
+  <AllowSpaceInPath>true</AllowSpaceInPath>
+  <AllowNonAsciiCharacters>true</AllowNonAsciiCharacters>
+  <MaintenanceToolName>setuptool</MaintenanceToolName>
+  <RemoteRepositories>
+    <Repository>
+      <Url>http://relog.xii.jp/download/helloworld</Url>
+      <Enabled>1</Enabled>
+      <Username>hello</Username>
+      <DisplayName>HelloWorld repository(http://relog.xii.jp/download/helloworld)</DisplayName>
+    </Repository>
+  </RemoteRepositories>
+</Installer>
