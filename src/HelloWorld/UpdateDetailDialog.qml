@@ -12,7 +12,7 @@ ApplicationWindow {
   modality: Qt.ApplicationModal
   //デフォルトは非表示
   visible: false
-
+  //モデルへのエイリアス
   property alias xml: updateDetailModel.xml
 
   //アップデート開始
@@ -42,8 +42,8 @@ ApplicationWindow {
       Layout.fillWidth: true    //可能な限り横に広げる
       Layout.fillHeight: true   //可能な限り縦に広げる
       TableViewColumn{ role: "name" ; title: "Name"; width: 200 }
-      TableViewColumn{ role: "version"; title: "Version"; width: 100 }
-      TableViewColumn{ role: "size"; title: "Size"; width: 100 }
+      TableViewColumn{ role: "version"; title: "Version"; width: 80 }
+      TableViewColumn{ role: "size"; title: "Size"; width: 80 }
       model: updateDetailModel
     }
     RowLayout {

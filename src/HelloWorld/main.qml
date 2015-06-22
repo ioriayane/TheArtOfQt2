@@ -18,8 +18,8 @@ ApplicationWindow {
     //メンテツールのファイル名
     toolName: "setuptool.exe"
 
+    //アップデートがあるかの状態が変化した
     onHasUpdateChanged: {
-      //アップデートがあるかの状態が変化した
       console.debug("found update:" + hasUpdate)
       if(hasUpdate){
         //アップデートが見つかった
@@ -28,8 +28,8 @@ ApplicationWindow {
         updateDetailDlg.show()
       }
     }
+    //実行状態が変化した
     onRunningChanged: {
-      //実行状態が変化した
       console.debug("running:" + running)
       if(!running && !hasUpdate){
         //停止したときに見つかっていない
@@ -47,17 +47,20 @@ ApplicationWindow {
     repeat: false
     running: true
     onTriggered: {
+      //自動実行として確認開始
       mainte.automatically = true
       mainte.checkUpdate()
     }
   }
 
+  //メニュー
   menuBar: MenuBar {
     Menu {
       title: qsTr("File")
       MenuItem {
         text: qsTr("Check update")
         onTriggered: {
+          //手動実行として確認開始
           mainte.automatically = false
           mainte.checkUpdate()
         }
@@ -77,7 +80,7 @@ ApplicationWindow {
   //アップデート確認ダイアログ
   UpdateDetailDialog {
     id: updateDetailDlg
-    onAccepted: { console.debug("Want update!") }
+    onAccepted: { console.debug("Please update!") }
     onCanceled: { console.debug("No thank you") }
   }
   //見つからなかった時の案内

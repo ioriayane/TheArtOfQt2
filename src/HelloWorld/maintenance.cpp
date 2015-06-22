@@ -24,20 +24,22 @@ void Maintenance::checkUpdate()
     return;
   }
 
+  //フルパスを作成（カレントがどこにあるかわからないので）
   QString path;
   path = QCoreApplication::applicationDirPath();
   path.append("/");
   path.append(toolName());
 
+  //アップデート確認用のパラメータを設定
   QStringList args;
   args.append("--checkupdates");
 
+  //プロセスが動いてなかったら実行
   if(m_process.state() == QProcess::NotRunning){
     m_process.start(path, args);
   }else{
     qDebug() << "not start";
   }
-
 }
 
 //更新があるかの取得
@@ -128,7 +130,7 @@ void Maintenance::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
       }else{
       }
     }
-    //xmlパースしてバージョンとかを改行区切りにして１つの文字列にしてQStringListでまとめて提供？って案もあった
+    //取得した情報などを設定
     setUpdateDetail(xml_str);
     setHasUpdate(true);
 
@@ -141,13 +143,13 @@ void Maintenance::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
     //"
     setHasUpdate(false);
   }
+  //停止状態に変更
   setRunning(false);
 }
 //プロセスがエラー
 void Maintenance::processError(QProcess::ProcessError error)
 {
   qDebug() << "RecordingThread::processError " << error;
-
   setRunning(false);
 }
 
