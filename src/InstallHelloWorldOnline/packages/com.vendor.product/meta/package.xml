@@ -4,7 +4,6 @@
   <Description>Install this example.</Description>
   <Version>0.1.0-1</Version>
   <ReleaseDate>2015-08-14</ReleaseDate>
-  <Name>com.vendor.product</Name>
   <Default>script</Default>
   <Licenses>
     <License name="Hello World Public License Agreement" file="license.txt" />

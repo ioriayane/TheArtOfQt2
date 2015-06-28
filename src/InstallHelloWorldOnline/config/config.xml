@@ -8,7 +8,6 @@
   <TargetDir>@ApplicationsDir@/@ProductName@</TargetDir>
   <AllowSpaceInPath>true</AllowSpaceInPath>
   <AllowNonAsciiCharacters>true</AllowNonAsciiCharacters>
-  <MaintenanceToolName>setuptool</MaintenanceToolName>
   <RemoteRepositories>
     <Repository>
       <Url>http://relog.xii.jp/download/helloworld</Url>
