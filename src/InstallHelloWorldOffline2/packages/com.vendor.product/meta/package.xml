@@ -3,8 +3,7 @@
   <DisplayName>The root component</DisplayName>
   <Description>Install this example.</Description>
   <Version>0.1.0-1</Version>
-  <ReleaseDate>2014-12-30</ReleaseDate>
-  <Name>com.vendor.product</Name>
+  <ReleaseDate>2015-08-14</ReleaseDate>
   <Default>script</Default>
   <Licenses>
     <License name="Hello World Public License Agreement" file="license.txt" />
