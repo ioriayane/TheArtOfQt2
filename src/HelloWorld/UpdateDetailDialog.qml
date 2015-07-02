@@ -15,12 +15,12 @@ ApplicationWindow {
   //モデルへのエイリアス
   property alias xml: updateDetailModel.xml
 
-  //アップデート開始
+  //アップデート開始                                  [1]
   signal accepted()
   //アップデートキャンセル
   signal canceled()
 
-  //アップデート情報の明細を管理するモデル
+  //アップデート情報の明細を管理するモデル                   [2]
   XmlListModel {
     id: updateDetailModel
     query: "/updates/update"
@@ -37,7 +37,7 @@ ApplicationWindow {
     Text {
       text: qsTr("The following update was found.")
     }
-    //明細表
+    //明細表                                     [3]
     TableView {
       Layout.fillWidth: true    //可能な限り横に広げる
       Layout.fillHeight: true   //可能な限り縦に広げる
@@ -48,20 +48,20 @@ ApplicationWindow {
     }
     RowLayout {
       Layout.alignment: Qt.AlignRight
-      //アップデート開始ボタン
+      //アップデート開始ボタン                         [4]
       Button {
         text: qsTr("Update")
         onClicked: {
-          root.visible = false
           root.accepted()
+          root.close()
         }
       }
-      //アップデートキャンセルボタン
+      //アップデートキャンセルボタン                      [5]
       Button {
         text: qsTr("Cancel")
         onClicked: {
-          root.visible = false
           root.canceled()
+          root.close()
         }
       }
     }

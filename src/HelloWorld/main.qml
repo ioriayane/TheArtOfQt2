@@ -9,39 +9,32 @@ ApplicationWindow {
   height: 480
   title: qsTr("Hello World")
 
-  //メンテナンス機能
+  //メンテナンス機能                                  [1]
   Maintenance {
     id: mainte
     //アップデート確認の自動実行中かフラグ
     property bool automatically: false
-
     //メンテツールのファイル名
-    toolName: "setuptool.exe"
+    toolName: "maintenancetool.exe"
 
-    //アップデートがあるかの状態が変化した
-    onHasUpdateChanged: {
-      console.debug("found update:" + hasUpdate)
-      if(hasUpdate){
-        //アップデートが見つかった
-        console.debug("detail:" + updateDetail)
-        updateDetailDlg.xml = updateDetail
-        updateDetailDlg.show()
-      }
-    }
-    //実行状態が変化した
-    onRunningChanged: {
-      console.debug("running:" + running)
-      if(!running && !hasUpdate){
-        //停止したときに見つかっていない
-        if(!automatically){
-          //ただし自動実行じゃないとき
+    //実行状態が変化した                             [3]
+    onStateChanged: {
+      if(state == Maintenance.FINISH){
+        //アップデート確認が終了
+        if(hasUpdate){
+          //アップデートが見つかった
+          console.debug("detail:" + updateDetail)
+          updateDetailDlg.xml = updateDetail
+          updateDetailDlg.show()
+        }else if(!automatically){
+          //見つかってなくて自動実行じゃないとき
           notFoundDlg.open()
         }
       }
     }
   }
 
-  //アップデート確認の自動実行用のタイマー
+  //アップデート確認の自動実行用のタイマー                   [4]
   Timer {
     interval: 2000
     repeat: false
@@ -60,7 +53,7 @@ ApplicationWindow {
       MenuItem {
         text: qsTr("Check update")
         onTriggered: {
-          //手動実行として確認開始
+          //手動実行として確認開始                     [5]
           mainte.automatically = false
           mainte.checkUpdate()
         }
@@ -77,13 +70,17 @@ ApplicationWindow {
     anchors.centerIn: parent
   }
 
-  //アップデート確認ダイアログ
+  //アップデート確認ダイアログ                             [6]
   UpdateDetailDialog {
     id: updateDetailDlg
-    onAccepted: { console.debug("Please update!") }
+    onAccepted: {
+
+      mainte.startMaintenanceTool()   //メンテツール起動
+      Qt.quit()
+    }
     onCanceled: { console.debug("No thank you") }
   }
-  //見つからなかった時の案内
+  //見つからなかった時の案内                              [7]
   MessageDialog {
     id: notFoundDlg
     title: qsTr("Notification")
