@@ -1,7 +1,7 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Dialogs 1.2
-import com.example.plugin.maintenance 1.0
+import com.example.plugin.maintenance 1.0       //[1]
 
 ApplicationWindow {
   visible: true
@@ -9,7 +9,7 @@ ApplicationWindow {
   height: 480
   title: qsTr("Hello World")
 
-  //メンテナンス機能                                  [1]
+  //メンテナンス機能                                  [2]
   Maintenance {
     id: mainte
     //アップデート確認の自動実行中かフラグ
@@ -74,7 +74,6 @@ ApplicationWindow {
   UpdateDetailDialog {
     id: updateDetailDlg
     onAccepted: {
-
       mainte.startMaintenanceTool()   //メンテツール起動
       Qt.quit()
     }

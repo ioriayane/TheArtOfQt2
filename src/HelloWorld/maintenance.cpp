@@ -1,7 +1,5 @@
 #include "maintenance.h"
 #include <QCoreApplication>
-#include <QDesktopServices>
-#include <QUrl>
 #include <QDebug>
 
 Maintenance::Maintenance(QObject *parent) :
@@ -54,8 +52,7 @@ void Maintenance::startMaintenanceTool(bool checkupdate)
     }
   }else{
     //メンテツールの通常起動はプロセス管理しない                       [2]
-    QUrl url("file:///" + path);
-    QDesktopServices::openUrl(url);
+    QProcess::startDetached(path);
   }
 }
 //メンテツールの状態
