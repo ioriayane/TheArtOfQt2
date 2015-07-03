@@ -11,7 +11,7 @@
     <message>
         <location filename="finishandopen.ui" line="24"/>
         <source>Run Application</source>
-        <translation type="unfinished">アプリケーションを実行する</translation>
+        <translation>アプリケーションを実行する</translation>
     </message>
 </context>
 </TS>
