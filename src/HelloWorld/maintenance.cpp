@@ -56,11 +56,11 @@ void Maintenance::startMaintenanceTool(bool checkupdate)
   }
 }
 //メンテツールの状態
-Maintenance::PROCESS_STATE Maintenance::state() const
+Maintenance::ProcessState Maintenance::state() const
 {
   return m_state;
 }
-void Maintenance::setState(const Maintenance::PROCESS_STATE &state)
+void Maintenance::setState(const Maintenance::ProcessState &state)
 {
   if(m_state == state)  return;
   m_state = state;

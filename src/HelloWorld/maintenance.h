@@ -8,8 +8,10 @@ class Maintenance : public QObject
 {
   Q_OBJECT
 
-  //プロパティの定義                                                    [1]
-  Q_PROPERTY(PROCESS_STATE state READ state WRITE setState NOTIFY stateChanged)
+  //列挙型の公開                                                      [1]
+  Q_ENUMS(ProcessState)
+  //プロパティの公開
+  Q_PROPERTY(ProcessState state READ state WRITE setState NOTIFY stateChanged)
   Q_PROPERTY(bool hasUpdate READ hasUpdate)
   Q_PROPERTY(QString updateDetail READ updateDetail)
   Q_PROPERTY(QString toolName READ toolName WRITE setToolName)
@@ -17,7 +19,7 @@ class Maintenance : public QObject
 public:
   explicit Maintenance(QObject *parent = 0);
 
-  enum PROCESS_STATE{
+  enum ProcessState{
     STOP,
     RUNNING,
     FINISH
@@ -27,8 +29,8 @@ public:
   Q_INVOKABLE void startMaintenanceTool(bool checkupdate = false);
                                                       //メンテナンスツール起動
 
-  PROCESS_STATE state() const;                        //メンテツールの状態
-  void setState(const PROCESS_STATE &state);
+  ProcessState state() const;                        //メンテツールの状態
+  void setState(const ProcessState &state);
   bool hasUpdate() const;                             //更新があるかの取得
   void setHasUpdate(const bool has);
   QString updateDetail() const;                       //更新の詳細情報
@@ -47,7 +49,7 @@ public slots:
   void processError(QProcess::ProcessError error);
 
 private:
-  PROCESS_STATE m_state;
+  ProcessState m_state;
   bool m_hasUpdate;
   QString m_updateDetail;
   QString m_toolName;
