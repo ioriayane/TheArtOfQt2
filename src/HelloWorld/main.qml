@@ -15,7 +15,7 @@ ApplicationWindow {
     //アップデート確認の自動実行中かフラグ
     property bool automatically: false
     //メンテツールのファイル名
-    toolName: "maintenancetool.exe"
+    toolName: "maintenancetool"
 
     //実行状態が変化した                             [3]
     onStateChanged: {

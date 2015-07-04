@@ -35,9 +35,16 @@ void Maintenance::startMaintenanceTool(bool checkupdate)
 
   //フルパスを作成（カレントがどこにあるかわからないので）
   QString path;
-  path = QCoreApplication::applicationDirPath();
-  path.append("/");
-  path.append(toolName());
+  QString temp;
+#if defined(Q_OS_WIN)
+  temp = "%1/%2.exe";
+#elif defined(Q_OS_MAC)
+  temp = "%1/../../../%2.app";
+#else
+  temp = "%1/%2";
+#endif
+  path = QString(temp).arg(QCoreApplication::applicationDirPath()).arg(toolName());
+  qDebug() << path;
 
   if(checkupdate){
     //アップデート確認用のパラメータを設定                            [1]
