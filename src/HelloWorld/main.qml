@@ -49,9 +49,9 @@ ApplicationWindow {
   //メニュー
   menuBar: MenuBar {
     Menu {
-      title: qsTr("File")
+      title: qsTr("&File")
       MenuItem {
-        text: qsTr("Check update")
+        text: qsTr("&Check update")
         onTriggered: {
           //手動実行として確認開始                     [5]
           mainte.automatically = false
@@ -59,7 +59,7 @@ ApplicationWindow {
         }
       }
       MenuItem {
-        text: qsTr("Exit")
+        text: qsTr("&Exit")
         onTriggered: Qt.quit()
       }
     }
