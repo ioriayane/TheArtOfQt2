@@ -5,6 +5,7 @@
   <Version>0.1.0-1</Version>
   <ReleaseDate>2015-08-14</ReleaseDate>
   <Default>script</Default>
+  <SortingPriority>20</SortingPriority>
   <Licenses>
     <License name="Hello World Public License Agreement" file="license.txt" />
   </Licenses>

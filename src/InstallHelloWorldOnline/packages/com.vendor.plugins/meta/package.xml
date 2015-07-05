@@ -4,6 +4,7 @@
     <Description>Install plugins.</Description>
     <Version>0.1</Version>
     <ReleaseDate>2015-08-14</ReleaseDate>
+    <SortingPriority>10</SortingPriority>
     <Licenses>
         <License name="Plugins License Agreement" file="license.txt" />
     </Licenses>
