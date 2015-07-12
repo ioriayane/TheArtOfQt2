@@ -8,5 +8,4 @@
   <TargetDir>@ApplicationsDir@/@ProductName@</TargetDir>
   <AllowSpaceInPath>true</AllowSpaceInPath>
   <AllowNonAsciiCharacters>true</AllowNonAsciiCharacters>
-<WizardStyle>Classic</WizardStyle>
 </Installer>
