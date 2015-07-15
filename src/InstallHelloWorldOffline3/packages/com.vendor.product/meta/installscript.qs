@@ -64,6 +64,17 @@ Component.prototype.createOperations = function()
                            , "workingDirectory=@TargetDir@"
                            , "iconPath=@TargetDir@/HelloWorld.exe"
                            , "iconId=0")
+
+    }else if (installer.value("os") == "x11"){
+      //ランチャー用アイコン
+      component.addOperation("InstallIcons", "@TargetDir@/icons/")
+      //実行ファイル用のショートカット
+      component.addOperation("CreateDesktopEntry"
+                           , "HelloWorld.desktop"
+                           , "Type=Application\nExec=@TargetDir@/HelloWorld\nPath=@TargetDir@\n"
+                            +"Name=Hello World\nGenericName=Example Application.\n"
+                            +"Icon=HelloWorld\nTerminal=false\nCategories=Development"
+                           )
     }
   }catch(e){
     print(e)
@@ -92,15 +103,19 @@ Component.prototype.installationFinished = function ()
     if(installer.status === QInstaller.Success){
       //追加したレイアウトのオブジェクト取得
       var form = component.userInterface("OpenFileForm")
-      //チェック状態を確認
+      //スキーム(Windowsのみ特別)
+      var scheme = "file://"
+      if(installer.value("os") === "win"){
+        scheme = "file:///"
+      }
+      //チェック状態を確認して実行
       if(form.openReadmeCheckBox.checked){
-        //実行
-        QDesktopServices.openUrl("file:///"
-                                 + installer.value("TargetDir") + "/README.txt")
+        QDesktopServices.openUrl(scheme + installer.value("TargetDir")
+                                        + "/README.txt")
       }
       if(form.runAppCheckBox.checked){
-        QDesktopServices.openUrl("file:///"
-                                 + installer.value("TargetDir") + "/HelloWorld.exe")
+        QDesktopServices.openUrl(scheme + installer.value("TargetDir")
+                                        + "/HelloWorld")
       }
     }
   }catch(e){

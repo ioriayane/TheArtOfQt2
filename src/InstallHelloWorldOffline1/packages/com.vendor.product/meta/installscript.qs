@@ -32,6 +32,17 @@ Component.prototype.createOperations = function()
                            , "workingDirectory=@TargetDir@"
                            , "iconPath=@TargetDir@/HelloWorld.exe"
                            , "iconId=0")
+
+    }else if ( installer.value("os") == "x11" ){
+      //ランチャー用アイコン
+      component.addOperation("InstallIcons", "@TargetDir@/icons/")
+      //実行ファイル用のショートカット
+      component.addOperation("CreateDesktopEntry"
+                           , "HelloWorld.desktop"
+                           , "Type=Application\nExec=@TargetDir@/HelloWorld\nPath=@TargetDir@\n"
+                            +"Name=Hello World\nGenericName=Example Application.\n"
+                            +"Icon=HelloWorld\nTerminal=false\nCategories=Development"
+                           )
     }
   }catch(e){
     print(e)
