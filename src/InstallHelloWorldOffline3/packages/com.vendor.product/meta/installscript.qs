@@ -103,10 +103,14 @@ Component.prototype.installationFinished = function ()
     if(installer.status === QInstaller.Success){
       //追加したレイアウトのオブジェクト取得
       var form = component.userInterface("OpenFileForm")
-      //スキーム(Windowsのみ特別)
+      //スキームと拡張子
       var scheme = "file://"
+      var ext = ""
       if(installer.value("os") === "win"){
         scheme = "file:///"
+        ext = ".exe"
+      }else if(installer.value("os") === "mac"){
+        ext = ".app"
       }
       //チェック状態を確認して実行
       if(form.openReadmeCheckBox.checked){
@@ -115,7 +119,7 @@ Component.prototype.installationFinished = function ()
       }
       if(form.runAppCheckBox.checked){
         QDesktopServices.openUrl(scheme + installer.value("TargetDir")
-                                        + "/HelloWorld")
+                                        + "/HelloWorld" + ext)
       }
     }
   }catch(e){
