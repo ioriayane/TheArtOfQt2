@@ -38,6 +38,7 @@ build-*
 Thumbs.db
 *.7z
 *.sha1
+*.DS_Store
 
 # QtIFW
 repository*
