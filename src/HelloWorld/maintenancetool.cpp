@@ -51,9 +51,15 @@ void MaintenanceTool::startMaintenanceTool(StartMode mode)
     }
   }else{
     //更新用のパラメータを設定                                   [2]
+#if defined(Q_OS_MAC)
+    //MacはQProcess::startと同じ挙動しないので回避策（openコマンドへ差し替え）
+    args.append(path);
+    args.append("--args");
+    path = "open";
+#endif
     args.append("--updater");
     //メンテツールの通常起動はプロセス管理しない
-    QProcess::startDetached(path, args);
+    qDebug() << "start process?:" << QProcess::startDetached(path, args);
   }
 }
 //メンテツールの状態
