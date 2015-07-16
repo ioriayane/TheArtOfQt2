@@ -3,7 +3,7 @@ TEMPLATE = app
 QT += qml quick widgets
 
 SOURCES += main.cpp \
-    maintenance.cpp
+    maintenancetool.cpp
 
 RESOURCES += qml.qrc
 
@@ -22,4 +22,4 @@ mac{
 }
 
 HEADERS += \
-    maintenance.h
+    maintenancetool.h

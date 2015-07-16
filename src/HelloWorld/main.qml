@@ -11,22 +11,20 @@ ApplicationWindow {
 
   //メンテナンス機能                                  [2]
   Maintenance {
-    id: mainte
+    id: maintenance
     //アップデート確認の自動実行中かフラグ
-    property bool automatically: false
-    //メンテツールのファイル名
-    toolName: "maintenancetool"
+    property bool automatic: false
 
     //実行状態が変化した                             [3]
     onStateChanged: {
-      if(state == Maintenance.FINISH){
+      if(state == Maintenance.Stop){
         //アップデート確認が終了
         if(hasUpdate){
           //アップデートが見つかった
-          console.debug("detail:" + updateDetail)
-          updateDetailDlg.xml = updateDetail
+          console.debug("detail:" + updateDetails)
+          updateDetailDlg.xml = updateDetails
           updateDetailDlg.show()
-        }else if(!automatically){
+        }else if(!automatic){
           //見つかってなくて自動実行じゃないとき
           notFoundDlg.open()
         }
@@ -41,8 +39,8 @@ ApplicationWindow {
     running: true
     onTriggered: {
       //自動実行として確認開始
-      mainte.automatically = true
-      mainte.checkUpdate()
+      maintenance.automatic = true
+      maintenance.checkUpdate()
     }
   }
 
@@ -54,8 +52,8 @@ ApplicationWindow {
         text: qsTr("&Check update")
         onTriggered: {
           //手動実行として確認開始                     [5]
-          mainte.automatically = false
-          mainte.checkUpdate()
+          maintenance.automatic = false
+          maintenance.checkUpdate()
         }
       }
       MenuItem {
@@ -74,8 +72,10 @@ ApplicationWindow {
   UpdateDetailDialog {
     id: updateDetailDlg
     onAccepted: {
-      mainte.startMaintenanceTool()   //メンテツール起動
-      Qt.quit()
+      maintenance.startMaintenanceTool()   //メンテツール起動
+      if(Qt.platform.os == "windows"){
+        Qt.quit()
+      }
     }
     onCanceled: { console.debug("No thank you") }
   }

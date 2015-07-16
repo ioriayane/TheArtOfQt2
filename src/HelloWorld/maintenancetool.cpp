@@ -1,14 +1,12 @@
-#include "maintenance.h"
+#include "maintenancetool.h"
 #include <QCoreApplication>
+#include <QDir>
 #include <QDebug>
 
-Maintenance::Maintenance(QObject *parent) :
+MaintenanceTool::MaintenanceTool(QObject *parent) :
   QObject(parent)
-, m_state(STOP)
+, m_state(MaintenanceTool::Stop)
 , m_hasUpdate(false)
-, m_updateDetail(QString())
-, m_toolName(QString())
-, m_process()
 {
   //プロセスが開始時のシグナル
   connect(&m_process, SIGNAL(started()), this, SLOT(processStarted()));
@@ -21,36 +19,30 @@ Maintenance::Maintenance(QObject *parent) :
 }
 
 //更新の確認開始
-void Maintenance::checkUpdate()
+void MaintenanceTool::checkUpdate()
 {
-  startMaintenanceTool(true);
+  startMaintenanceTool(MaintenanceTool::CheckUpdate);
 }
 
-void Maintenance::startMaintenanceTool(bool checkupdate)
+void MaintenanceTool::startMaintenanceTool(StartMode mode)
 {
-  if(toolName().length() == 0){
-    qDebug() << "Please set tool name.";
-    return;
-  }
-
   //フルパスを作成（カレントがどこにあるかわからないので）
+  QString toolName;
   QString path;
-  QString temp;
 #if defined(Q_OS_WIN)
-  temp = "%1/%2.exe";
+  toolName = "maintenancetool.exe";
 #elif defined(Q_OS_MAC)
-  temp = "%1/../../../%2.app";
+  toolName = "../../../maintenancetool.app";
 #else
-  temp = "%1/%2";
+  toolName = "maintenancetool";
 #endif
-  path = QString(temp).arg(QCoreApplication::applicationDirPath()).arg(toolName());
+  path = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(toolName);
   qDebug() << path;
 
-  if(checkupdate){
+  QStringList args;
+  if(mode == MaintenanceTool::CheckUpdate){
     //アップデート確認用のパラメータを設定                            [1]
-    QStringList args;
     args.append("--checkupdates");
-
     //プロセスが動いてなかったら実行
     if(m_process.state() == QProcess::NotRunning){
       m_process.start(path, args);
@@ -58,56 +50,51 @@ void Maintenance::startMaintenanceTool(bool checkupdate)
       qDebug() << "Already started.";
     }
   }else{
-    //メンテツールの通常起動はプロセス管理しない                       [2]
-    QProcess::startDetached(path);
+    //更新用のパラメータを設定                                   [2]
+    args.append("--updater");
+    //メンテツールの通常起動はプロセス管理しない
+    QProcess::startDetached(path, args);
   }
 }
 //メンテツールの状態
-Maintenance::ProcessState Maintenance::state() const
+MaintenanceTool::ProcessState MaintenanceTool::state() const
 {
   return m_state;
 }
-void Maintenance::setState(const Maintenance::ProcessState &state)
+void MaintenanceTool::setState(ProcessState state)
 {
   if(m_state == state)  return;
   m_state = state;
-  emit stateChanged();
+  emit stateChanged(m_state);
 }
 //更新があるかの取得
-bool Maintenance::hasUpdate() const
+bool MaintenanceTool::hasUpdate() const
 {
   return m_hasUpdate;
 }
-void Maintenance::setHasUpdate(const bool has)
+void MaintenanceTool::setHasUpdate(bool hasUpdate)
 {
-  m_hasUpdate = has;
+  if(m_hasUpdate == hasUpdate)  return;
+  m_hasUpdate = hasUpdate;
+  emit hasUpdateChanged(m_hasUpdate);
 }
 //更新の詳細情報
-QString Maintenance::updateDetail() const
+QString MaintenanceTool::updateDetails() const
 {
-  return m_updateDetail;
+  return m_updateDetails;
 }
-void Maintenance::setUpdateDetail(const QString &updateDetail)
+void MaintenanceTool::setUpdateDetail(const QString &updateDetail)
 {
-  m_updateDetail = updateDetail;
-}
-//メンテツールのパス
-QString Maintenance::toolName() const
-{
-  return m_toolName;
-}
-void Maintenance::setToolName(const QString &toolPath)
-{
-  m_toolName = toolPath;
+  m_updateDetails = updateDetail;
 }
 
 //プロセスが開始
-void Maintenance::processStarted()
+void MaintenanceTool::processStarted()
 {
-  setState(Maintenance::RUNNING);
+  setState(MaintenanceTool::Running);
 }
 //プロセスが終了
-void Maintenance::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
+void MaintenanceTool::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
   qDebug() << "Maintenance::processFinished , exitCode=" << exitCode << ", exitStatus=" << exitStatus;
 
@@ -119,9 +106,9 @@ void Maintenance::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
     //アップデートあり
 
     //標準出力を取得する                                         [3]
-    QByteArray std_out = m_process.readAllStandardOutput();
-    QString std_out_str = QString::fromLocal8Bit(std_out);
-    qDebug() << "out>" << std_out_str;
+    QByteArray stdOut = m_process.readAllStandardOutput();
+    QString stdOutStr = QString::fromLocal8Bit(stdOut);
+    qDebug() << "out>" << stdOutStr;
     //Maintenance::processFinished , exitCode= 0 , exitStatus= 0
     //out> "[0] Warning: Could not create lock file 'C:/Program Files (x86)/HelloWorld/lockmyApp15021976.lock': アクセスが拒否されました。
     // (0x00000005)
@@ -133,35 +120,35 @@ void Maintenance::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
     //err> ""
 
     //アップデート情報のタグ部分だけ抽出する                             [4]
-    QString xml_str;
+    QString xmlStr;
     QStringList lines;
-    bool enable = false;
-    lines = std_out_str.split("\n");
+    bool enabled = false;
+    lines = stdOutStr.split("\n");
     foreach (QString line, lines) {
       if(line.contains("<updates>")){
-        enable = true;
-        xml_str.append(line);
+        enabled = true;
+        xmlStr.append(line);
       }else if(line.contains("</updates>")){
-        xml_str.append(line);
-        enable = false;
-      }else if(enable){
-        xml_str.append(line);
+        xmlStr.append(line);
+        enabled = false;
+      }else if(enabled){
+        xmlStr.append(line);
       }else{
       }
     }
     //取得した情報などを設定
-    if(xml_str.length() > 0){
-      setUpdateDetail(xml_str);
+    if(xmlStr.length() > 0){
+      setUpdateDetail(xmlStr);
       setHasUpdate(true);
     }
     //停止状態に変更
-    setState(Maintenance::FINISH);
+    setState(MaintenanceTool::Stop);
 
   }else if(exitCode == 1){
     //アップデートなし
-    QByteArray std_err = m_process.readAllStandardError();
-    QString std_err_str = QString::fromLocal8Bit(std_err);
-    qDebug() << "err>" << std_err_str;
+    QByteArray stdErr = m_process.readAllStandardError();
+    QString stdErrStr = QString::fromLocal8Bit(stdErr);
+    qDebug() << "err>" << stdErrStr;
 
     //Maintenance::processFinished , exitCode= 1 , exitStatus= 0
     //out> "[0] Warning: Could not create lock file 'C:/Program Files (x86)/HelloWorld/lockmyApp15021976.lock': アクセスが拒否されました。
@@ -171,17 +158,17 @@ void Maintenance::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
     //"
 
     //停止状態に変更
-    setState(Maintenance::FINISH);
+    setState(MaintenanceTool::Stop);
   }else{
     //停止状態に変更
-    setState(Maintenance::STOP);
+    setState(MaintenanceTool::Stop);
   }
 }
 //プロセスがエラー
-void Maintenance::processError(QProcess::ProcessError error)
+void MaintenanceTool::processError(QProcess::ProcessError error)
 {
   qDebug() << "Maintenance::processError " << error;
-  setState(Maintenance::STOP);
+  setState(MaintenanceTool::Stop);
 }
 
 
