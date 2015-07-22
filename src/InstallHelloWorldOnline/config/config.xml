@@ -6,7 +6,6 @@
   <Publisher>relog</Publisher>
   <StartMenuDir>HelloWorld</StartMenuDir>
   <TargetDir>@ApplicationsDir@/@ProductName@</TargetDir>
-  <AllowSpaceInPath>true</AllowSpaceInPath>
   <AllowNonAsciiCharacters>true</AllowNonAsciiCharacters>
   <RemoteRepositories>
     <Repository>

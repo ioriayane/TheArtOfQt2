@@ -1,0 +1,35 @@
+<Updates>
+ <ApplicationName>{AnyApplication}</ApplicationName>
+ <ApplicationVersion>1.0.0</ApplicationVersion>
+ <Checksum>true</Checksum>
+ <PackageUpdate>
+  <Name>com.vendor.plugins</Name>
+  <DisplayName>Plugins component</DisplayName>
+  <Description>Install plugins.</Description>
+  <Version>0.1</Version>
+  <ReleaseDate>2015-08-14</ReleaseDate>
+  <SortingPriority>10</SortingPriority>
+  <Default>true</Default>
+  <UpdateFile OS="Any" UncompressedSize="49" CompressedSize="195"/>
+  <DownloadableArchives>content.7z</DownloadableArchives>
+  <Licenses>
+   <License name="Plugins License Agreement" file="license.txt"/>
+  </Licenses>
+  <SHA1>c02beccdb49885402edeee971e6039b2a24371b3</SHA1>
+ </PackageUpdate>
+ <PackageUpdate>
+  <Name>com.vendor.product</Name>
+  <DisplayName>The root component</DisplayName>
+  <Description>Install this example.</Description>
+  <Version>1.0.0</Version>
+  <ReleaseDate>2015-08-14</ReleaseDate>
+  <Default>true</Default>
+  <SortingPriority>20</SortingPriority>
+  <UpdateFile OS="Any" UncompressedSize="649041" CompressedSize="652221"/>
+  <DownloadableArchives>content.7z</DownloadableArchives>
+  <Licenses>
+   <License name="Hello World Public License Agreement" file="license.txt"/>
+  </Licenses>
+  <SHA1>8f9ae157aa140b2a18321f7f1e4c8d29c3c185c2</SHA1>
+ </PackageUpdate>
+</Updates>

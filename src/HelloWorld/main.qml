@@ -1,7 +1,7 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Dialogs 1.2
-import com.example.plugin.maintenance 1.0       //[1]
+import com.example.plugin.maintenancetool 1.0       //[1]
 
 ApplicationWindow {
   visible: true
@@ -10,14 +10,14 @@ ApplicationWindow {
   title: qsTr("Hello World")
 
   //メンテナンス機能                                  [2]
-  Maintenance {
-    id: maintenance
+  MaintenanceTool {
+    id: maintenancetool
     //アップデート確認の自動実行中かフラグ
     property bool automatic: false
 
     //実行状態が変化した                             [3]
     onStateChanged: {
-      if(state == Maintenance.Stop){
+      if(state == MaintenanceTool.Stop){
         //アップデート確認が終了
         if(hasUpdate){
           //アップデートが見つかった
@@ -39,8 +39,8 @@ ApplicationWindow {
     running: true
     onTriggered: {
       //自動実行として確認開始
-      maintenance.automatic = true
-      maintenance.checkUpdate()
+      maintenancetool.automatic = true
+      maintenancetool.checkUpdate()
     }
   }
 
@@ -52,8 +52,8 @@ ApplicationWindow {
         text: qsTr("&Check update")
         onTriggered: {
           //手動実行として確認開始                     [5]
-          maintenance.automatic = false
-          maintenance.checkUpdate()
+          maintenancetool.automatic = false
+          maintenancetool.checkUpdate()
         }
       }
       MenuItem {
@@ -72,7 +72,7 @@ ApplicationWindow {
   UpdateDetailDialog {
     id: updateDetailDlg
     onAccepted: {
-      maintenance.startMaintenanceTool()   //メンテツール起動
+      maintenancetool.startMaintenanceTool()   //メンテツール起動
       if(Qt.platform.os == "windows"){
         Qt.quit()
       }

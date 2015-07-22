@@ -41,7 +41,7 @@ void MaintenanceTool::startMaintenanceTool(StartMode mode)
 
   QStringList args;
   if(mode == MaintenanceTool::CheckUpdate){
-    //アップデート確認用のパラメータを設定                            [1]
+    //アップデート確認用のオプションを設定                            [1]
     args.append("--checkupdates");
     //プロセスが動いてなかったら実行
     if(m_process.state() == QProcess::NotRunning){
@@ -50,7 +50,7 @@ void MaintenanceTool::startMaintenanceTool(StartMode mode)
       qDebug() << "Already started.";
     }
   }else{
-    //更新用のパラメータを設定                                   [2]
+    //更新用のオプションを設定                                   [2]
 #if defined(Q_OS_MAC)
     //MacはQProcess::startと同じ挙動しないので回避策（openコマンドへ差し替え）
     args.append(path);
@@ -59,7 +59,7 @@ void MaintenanceTool::startMaintenanceTool(StartMode mode)
 #endif
     args.append("--updater");
     //メンテツールの通常起動はプロセス管理しない
-    qDebug() << "start process?:" << QProcess::startDetached(path, args);
+    QProcess::startDetached(path, args);
   }
 }
 //メンテツールの状態

@@ -8,12 +8,11 @@
   <Licenses>
     <License name="Hello World Public License Agreement" file="license.txt" />
   </Licenses>
-  <Script>installscript.qs</Script>
-  <UserInterfaces>
-    <UserInterface>openfileform.ui</UserInterface>
-    <UserInterface>standardorcustom.ui</UserInterface>
-  </UserInterfaces>
   <Translations>
     <Translation>ja.qm</Translation>
   </Translations>
+  <Script>installscript.qs</Script>
+  <UserInterfaces>
+    <UserInterface>openfileform.ui</UserInterface>
+  </UserInterfaces>
 </Package>
