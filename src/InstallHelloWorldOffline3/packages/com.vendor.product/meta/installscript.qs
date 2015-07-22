@@ -23,7 +23,7 @@ Component.prototype.createOperations = function()
     // createOperationsの基本処理を実行
     component.createOperations()
 
-    if(systemInfo.productType === "windows"){
+    if(systemInfo.kernelType === "winnt"){
       //Readme.txt用のショートカット
       component.addOperation("CreateShortcut"
                              , "@TargetDir@/README.txt"
@@ -39,7 +39,7 @@ Component.prototype.createOperations = function()
                              , "iconPath=@TargetDir@/HelloWorld.exe"
                              , "iconId=0")
 
-    }else if(systemInfo.productType == "opensuse"){
+    }else if(systemInfo.kernelType == "linux"){
       //ランチャー用アイコン
       component.addOperation("InstallIcons", "@TargetDir@/icons/")
       //実行ファイル用のショートカット
