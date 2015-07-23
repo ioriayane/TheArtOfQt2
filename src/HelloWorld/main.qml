@@ -1,5 +1,5 @@
-import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick 2.4
+import QtQuick.Controls 1.3
 import QtQuick.Dialogs 1.2
 import com.example.plugin.maintenancetool 1.0       //[1]
 
@@ -17,13 +17,13 @@ ApplicationWindow {
 
     //実行状態が変化した                             [3]
     onStateChanged: {
-      if(state == MaintenanceTool.Stop){
+      if(state === MaintenanceTool.NotRunning){
         //アップデート確認が終了
         if(hasUpdate){
           //アップデートが見つかった
           console.debug("detail:" + updateDetails)
           updateDetailDlg.xml = updateDetails
-          updateDetailDlg.show()
+          updateDetailDlg.open()
         }else if(!automatic){
           //見つかってなくて自動実行じゃないとき
           notFoundDlg.open()
@@ -69,7 +69,7 @@ ApplicationWindow {
   }
 
   //アップデート確認ダイアログ                             [6]
-  UpdateDetailDialog {
+  UpdateDetailsDialog {
     id: updateDetailDlg
     onAccepted: {
       maintenancetool.startMaintenanceTool()   //メンテツール起動
@@ -77,9 +77,9 @@ ApplicationWindow {
         Qt.quit()
       }
     }
-    onCanceled: { console.debug("No thank you") }
+    onNo: { console.debug("No thank you") }
   }
-  //見つからなかった時の案内                              [7]
+  //見つからなかった時の案内
   MessageDialog {
     id: notFoundDlg
     title: qsTr("Notification")

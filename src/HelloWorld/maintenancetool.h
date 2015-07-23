@@ -2,7 +2,7 @@
 #define MAINTENANCE_H
 
 #include <QtCore/QObject>
-#include <QProcess>
+#include <QtCore/QProcess>
 
 class MaintenanceTool : public QObject
 {
@@ -14,13 +14,13 @@ class MaintenanceTool : public QObject
   //プロパティの公開
   Q_PROPERTY(ProcessState state READ state NOTIFY stateChanged)
   Q_PROPERTY(bool hasUpdate READ hasUpdate NOTIFY hasUpdateChanged)
-  Q_PROPERTY(QString updateDetails READ updateDetails)
+  Q_PROPERTY(QString updateDetails READ updateDetails NOTIFY updateDetailsChanged)
 
 public:
   explicit MaintenanceTool(QObject *parent = 0);
 
   enum ProcessState { //プロセスの実行状態
-    Stop,
+    NotRunning,
     Running
   };
   enum StartMode {    //メンテナンスツール実行時のモード設定
@@ -36,14 +36,15 @@ signals:
   //値が変化したときのシグナル
   void stateChanged(ProcessState state);
   void hasUpdateChanged(bool hasUpdate);
+  void updateDetailsChanged(const QString &updateDetails);
 
 public slots:
-  Q_INVOKABLE void checkUpdate();                     //更新の確認開始 [2]
-  Q_INVOKABLE void startMaintenanceTool(StartMode mode = Updater);
-  void setHasUpdate(bool hasUpdate);                  //更新があるか
-  void setUpdateDetail(const QString &updateDetails); //更新の詳細情報
-                                                      //メンテナンスツール起動
+  void checkUpdate();                                 //更新の確認開始
+  void startMaintenanceTool(StartMode mode = Updater);
+
 private slots:
+  void setHasUpdate(bool hasUpdate);                  //更新があるか
+  void setUpdateDetails(const QString &updateDetails);//更新の詳細情報
   //プロセスの動作に関連するスロット
   void processStarted();
   void processFinished(int exitCode, QProcess::ExitStatus exitStatus);

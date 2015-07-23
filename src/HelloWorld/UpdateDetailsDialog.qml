@@ -1,9 +1,10 @@
-import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick 2.4
+import QtQuick.Controls 1.3
+import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.1
 import QtQuick.XmlListModel 2.0
 
-ApplicationWindow {
+Dialog {
   id: root
   width: 400
   height: 200
@@ -14,11 +15,8 @@ ApplicationWindow {
   visible: false
   //モデルへのエイリアス
   property alias xml: updateDetailModel.xml
-
-  //アップデート開始                                  [1]
-  signal accepted()
-  //アップデートキャンセル
-  signal canceled()
+  //YesボタンとNoボタンを配置                             [1]
+  standardButtons: StandardButton.Yes | StandardButton.No
 
   //アップデート情報の明細を管理するモデル                   [2]
   XmlListModel {
@@ -30,12 +28,12 @@ ApplicationWindow {
   }
   //アップデート情報を表示
   ColumnLayout {
-    anchors.fill: parent
-    anchors.margins: 10
+    anchors.left: parent.left
+    anchors.right: parent.right
     spacing: 5
     //案内メッセージ
     Text {
-      text: qsTr("The following update was found.")
+      text: qsTr("The following update was found. Do you want to update?")
     }
     //明細表                                     [3]
     TableView {
@@ -45,25 +43,6 @@ ApplicationWindow {
       TableViewColumn{ role: "version"; title: "Version"; width: 80 }
       TableViewColumn{ role: "size"; title: "Size"; width: 80 }
       model: updateDetailModel
-    }
-    RowLayout {
-      Layout.alignment: Qt.AlignRight
-      //アップデート開始ボタン                         [4]
-      Button {
-        text: qsTr("Update")
-        onClicked: {
-          root.accepted()
-          root.close()
-        }
-      }
-      //アップデートキャンセルボタン                      [5]
-      Button {
-        text: qsTr("Cancel")
-        onClicked: {
-          root.canceled()
-          root.close()
-        }
-      }
     }
   }
 }
