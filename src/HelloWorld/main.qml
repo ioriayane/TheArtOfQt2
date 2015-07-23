@@ -71,7 +71,7 @@ ApplicationWindow {
   //アップデート確認ダイアログ                             [6]
   UpdateDetailsDialog {
     id: updateDetailDlg
-    onAccepted: {
+    onYes: {
       maintenancetool.startMaintenanceTool()   //メンテツール起動
       if(Qt.platform.os == "windows"){
         Qt.quit()
