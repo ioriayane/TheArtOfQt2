@@ -6,8 +6,8 @@ import QtQuick.XmlListModel 2.0
 
 Dialog {
   id: root
-  width: 400
-  height: 200
+  width: 450
+  height: 250
   title: qsTr("Update Detail")
   //ウインドウをモーダルにする
   modality: Qt.ApplicationModal
