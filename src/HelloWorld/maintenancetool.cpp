@@ -87,9 +87,11 @@ QString MaintenanceTool::updateDetails() const
 {
   return m_updateDetails;
 }
-void MaintenanceTool::setUpdateDetails(const QString &updateDetail)
+void MaintenanceTool::setUpdateDetails(const QString &updateDetails)
 {
-  m_updateDetails = updateDetail;
+  if(m_updateDetails == updateDetails) return;
+  m_updateDetails = updateDetails;
+  emit updateDetailsChanged(m_updateDetails);
 }
 
 //プロセスが開始
